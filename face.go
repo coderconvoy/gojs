@@ -50,6 +50,11 @@ func (a able) Asset(s string) ([]byte, error) {
 	return a.ass(s)
 }
 
-func (a able) AssetDir(s string) ([]strin
+func (a able) AssetDir(s string) ([]string, error) {
+	return a.assdir(s)
+}
+
+func (ag *AssetGroup) AddFuncs(ass func(string) ([]byte, error), assdir func(string) ([]string, error)) {
+
 	ag.G = append(ag.G, able{ass, assdir})
 }
