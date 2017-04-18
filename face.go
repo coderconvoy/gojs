@@ -60,8 +60,12 @@ func (a able) AssetDir(s string) ([]string, error) {
 	return a.assdir(s)
 }
 
+//Add an Assetable to the group
+func (ag *AssetGroup) Add(a Assetable) {
+	ag.G = append(ag.G, a)
+}
+
 //AddFuncs, take two funcs, one an assetgrabber, and add them to the asset group as a new Assetable
 func (ag *AssetGroup) AddFuncs(ass func(string) ([]byte, error), assdir func(string) ([]string, error)) {
-
 	ag.G = append(ag.G, able{ass, assdir})
 }
