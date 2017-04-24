@@ -1,6 +1,10 @@
 package gojs
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/pkg/errors"
+)
 
 type Req struct {
 	Assetable
@@ -10,45 +14,45 @@ func (r *Req) Asset(s string) ([]byte, error) {
 	return r.Assetable.Asset(s) // todo, get with compile
 }
 
-func (r *Req) CompileRequires(s string) ([]byte, error) {
-	return r.compileRequires(s, make(map[string]bool))
+func (r *Req) CompileRequires(s string) error {
+	m := make(map[string]*ReqNode)
+	return r.compileRequires(s, &m)
 }
 
 func (r *Req) compileRequires(s string, collected *map[string]*ReqNode) error {
 	b, err := r.Assetable.Asset(s)
 	if err != nil {
-		return b, nil
+		return errors.Wrap(err, "Could not load Asset")
 	}
-	ss = string(b)
-	resNode = &ReqNode{
+	ss := string(b)
+	resNode := &ReqNode{
 		Map: collected,
 	}
 
-	content = []byte{}
 	d := 0
 	for {
 		od := d
 		sh, d := line(ss[d:])
 		if strings.HasPrefix(sh, "//") {
-			resNode.Contents = append(resNode.Contents, []byte(sh+"\n"))
+			resNode.Contents = append(resNode.Contents, []byte(sh+"\n")...)
 		} else {
 			ra, ok := parseRequire(sh)
 			if !ok {
-				resNode.Contents = append(resNode.Contents, b[od:])
+				resNode.Contents = append(resNode.Contents, b[od:]...)
 				return nil
 			}
 			resNode.Reqs = append(resNode.Reqs, ra)
-			r.compileRequires(ra.R)
+			r.compileRequires(ra.R, collected)
 
 		}
 
 		if d < len(ss) {
-			return errors.new("No Content")
+			return errors.New("No Content")
 		}
 
 	}
 
-	return []byte{}, nil
+	return nil
 }
 
 func line(s string) (string, int) {
@@ -70,8 +74,9 @@ func line(s string) (string, int) {
 	return s, len(s)
 }
 
+//TODO - Check if contains require keyword, etc
 func parseRequire(s string) (ReqAs, bool) {
-	ident := ""
-	fname := ""
-
+	ident, fname := "", ""
+	_, _ = ident, fname
+	return ReqAs{}, false
 }

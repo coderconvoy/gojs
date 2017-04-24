@@ -1,4 +1,4 @@
-
+package gojs
 
 type ReqAs struct {
 	R  string
@@ -12,16 +12,12 @@ type ReqNode struct {
 	Included bool
 }
 
-func NewReqNode(c []byte, r []string, m *map[string]*ReqNode) *ReqNode {
-	res = &ReqNode{
+func NewReqNode(c []byte, r []ReqAs, m *map[string]*ReqNode) *ReqNode {
+	res := &ReqNode{
 		Contents: c,
 		Reqs:     r,
 		Map:      m,
 		Included: false,
 	}
+	return res
 }
-
-
-
-
-
