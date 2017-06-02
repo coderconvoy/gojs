@@ -7,6 +7,7 @@ function tallOrWide(frac){
     
     var torwide = function(){
         var mDiv = document.getElementById("main-area");
+        if (mDiv == undefined) return;
         if (window.innerWidth > window.innerHeight * frac){
             console.log("Wide");
             mDiv.className = "main-wide";
@@ -20,11 +21,11 @@ function tallOrWide(frac){
 
     torwide()
     return function(n){
-        if (n === undefined) {
-            return n
+        if (n !== undefined) {
+            frac =  n;
         }
-        frac = n
-        torwide()
+        torwide();
+        return frac;
     }
 }
 
